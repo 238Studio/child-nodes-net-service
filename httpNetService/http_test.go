@@ -1,7 +1,7 @@
 package httpNetService_test
 
 import (
-	"child-nodes-net-service/httpNetService"
+	"child-nodes-http-service/httpNetService"
 	"testing"
 )
 
