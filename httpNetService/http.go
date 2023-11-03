@@ -1,22 +1,26 @@
-package service
+package httpNetService
 
 import (
 	"bytes"
-	"net/http"
-
 	_const "github.com/UniversalRobotDriveTeam/child-nodes-assist/const"
 	"github.com/UniversalRobotDriveTeam/child-nodes-assist/util"
 	jsoniter "github.com/json-iterator/go"
+	"net/http"
 )
 
-// Send 发送请求
-// 传入参数：url、请求头、请求体、method
-// 返回参数：map[sting]interface{}（返回结果，interface{}做接口断言）,错误信息
-func Send(url string, params map[string]string, req interface{}, method string) (map[string]interface{}, error) {
+// 发送请求
+// 传入参数：httpAPP、请求体、method
+// 返回参数：map[sting]interface{},错误信息
+func send(h HttpAPP, req interface{}, method string) (map[string]interface{}, error) {
+	//获取httpAPP的url和params
+	url := h.Url
+	Header := h.Params
+
 	//json格式化
 	json := jsoniter.ConfigCompatibleWithStandardLibrary
 	marshalReq, err := json.Marshal(req)
 	if err != nil {
+		//TODO:约定的错误处理
 		return nil, util.NewError(_const.TrivialException, _const.JsonMarshalError, false, err)
 	}
 
@@ -27,7 +31,7 @@ func Send(url string, params map[string]string, req interface{}, method string) 
 	}
 
 	//设置请求头
-	for k, v := range params {
+	for k, v := range Header {
 		request.Header.Set(k, v)
 	}
 
@@ -45,7 +49,8 @@ func Send(url string, params map[string]string, req interface{}, method string) 
 	var result map[string]interface{}
 	err = json.NewDecoder(response.Body).Decode(&result)
 	if err != nil {
-		return nil, util.NewError(_const.CommonException, _const.JsonUnmarshalError, false, err)
+		//TODO:约定的错误处理
+		return nil, err
 	}
 
 	return result, nil

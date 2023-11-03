@@ -1,4 +1,4 @@
-module child-nodes-net-service
+module child-nodes-http-service
 
 go 1.21.1
 
