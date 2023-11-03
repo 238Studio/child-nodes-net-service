@@ -1,7 +1,7 @@
 package httpNetService_test
 
 import (
-	"github.com/UniversalRobotDriveTeam/child-nodes-basic/robotBasicAPI/httpNetService"
+	"child-nodes-net-service/httpNetService"
 	"testing"
 )
 
