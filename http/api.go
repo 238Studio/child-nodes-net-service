@@ -1,6 +1,6 @@
 // Package childHTTP
 // 这个包是暴露给控制结构的API层
-// 控制上位机的网络传输过程
+// 控制上位机的HTTP网络传输过程
 package childHTTP
 
 import "child-nodes-net-service/http/service"
