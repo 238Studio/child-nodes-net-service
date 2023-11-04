@@ -17,13 +17,13 @@ func Send(url string, params map[string]string, req interface{}, method string) 
 	json := jsoniter.ConfigCompatibleWithStandardLibrary
 	marshalReq, err := json.Marshal(req)
 	if err != nil {
-		return nil, util.NewError(_const.TrivialException, _const.JsonMarshalError, false, err)
+		return nil, util.NewError(_const.TrivialException, _const.Network, err)
 	}
 
 	//构造请求
 	request, err := http.NewRequest(method, url, bytes.NewBuffer(marshalReq))
 	if err != nil {
-		return nil, util.NewError(_const.TrivialException, _const.HttpNewRequestError, false, err)
+		return nil, util.NewError(_const.TrivialException, _const.Network, err)
 	}
 
 	//设置请求头
@@ -35,7 +35,7 @@ func Send(url string, params map[string]string, req interface{}, method string) 
 	client := &http.Client{}
 	response, err := client.Do(request)
 	if err != nil {
-		return nil, util.NewError(_const.CommonException, _const.HttpDoError, false, err)
+		return nil, util.NewError(_const.CommonException, _const.Network, err)
 	}
 
 	//关闭请求
@@ -45,7 +45,7 @@ func Send(url string, params map[string]string, req interface{}, method string) 
 	var result map[string]interface{}
 	err = json.NewDecoder(response.Body).Decode(&result)
 	if err != nil {
-		return nil, util.NewError(_const.CommonException, _const.JsonUnmarshalError, false, err)
+		return nil, util.NewError(_const.CommonException, _const.Network, err)
 	}
 
 	return result, nil

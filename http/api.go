@@ -3,7 +3,7 @@
 // 控制上位机的HTTP网络传输过程
 package childHTTP
 
-import "child-nodes-net-service/http/service"
+import "github.com/UniversalRobotDriveTeam/child-nodes-net-service/http/service"
 
 // Get 发送GET请求
 // 传入参数：url、请求头、请求体
