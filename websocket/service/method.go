@@ -1,0 +1,68 @@
+package service
+
+import (
+	_const "github.com/UniversalRobotDriveTeam/child-nodes-assist/const"
+	"github.com/UniversalRobotDriveTeam/child-nodes-assist/util"
+)
+
+// InitModelMessageChan 模块管道初始化
+// 传入参数：模块名
+// 传出参数：模型消息通道结构体
+func (app *WebsocketServiceApp) InitModelMessageChan(moduleName string) *ModelMessageChan {
+	// 初始化模型消息通道结构体
+	modelMessageChan := &ModelMessageChan{
+		writeMessage: make(chan WebsocketMessage),
+		ReadMessage:  make(chan WebsocketMessage),
+		ErrorChan:    make(chan error),
+		stop:         make(chan struct{}),
+		conn:         app.conn,
+	}
+
+	// 将模型消息通道结构体添加到模型消息通道结构体map中
+	app.modelMessageChannels[moduleName] = modelMessageChan
+
+	return modelMessageChan
+}
+
+// StartRead 开始websocket读
+// 传入:无
+// 传出:无
+func (app *WebsocketServiceApp) StartRead() {
+	go app.read()
+}
+
+// StopRead 停止websocket读
+// 传入:无
+// 传出:无
+func (app *WebsocketServiceApp) StopRead() {
+	app.stop <- struct{}{}
+}
+
+func (app *WebsocketServiceApp) CloseConn() error {
+	return util.NewError(_const.TrivialException, _const.Network, app.conn.Close())
+}
+
+// StartWrite 开始写
+// 传入:无
+// 传出:无
+func (app *ModelMessageChan) StartWrite() {
+	go app.write()
+}
+
+// StopWrite 停止写
+// 传入:无
+// 传出:无
+func (app *ModelMessageChan) StopWrite() {
+	app.stop <- struct{}{}
+}
+
+// WriteMessage 写消息
+// 传入:消息结构
+// 传出:无
+func (app *ModelMessageChan) WriteMessage(moduleName string, isBytes bool, data interface{}) {
+	app.writeMessage <- WebsocketMessage{
+		ModuleName: moduleName,
+		IsBytes:    isBytes,
+		Data:       data,
+	}
+}
