@@ -16,6 +16,7 @@ func (app *WebsocketServiceApp) InitModelMessageChan(moduleName string) *ModelMe
 		ErrorChan:    make(chan error),
 		stop:         make(chan struct{}),
 		conn:         app.conn,
+		ctx:          app.ctx, //共享上下文
 	}
 
 	// 将模型消息通道结构体添加到模型消息通道结构体map中
@@ -38,8 +39,17 @@ func (app *WebsocketServiceApp) StopRead() {
 	app.stop <- struct{}{}
 }
 
+// CloseConn 关闭websocket连接
+// 传入:无
+// 传出:错误
 func (app *WebsocketServiceApp) CloseConn() error {
-	return util.NewError(_const.TrivialException, _const.Network, app.conn.Close())
+	app.stopReadAndWrite() //阻塞等待读写goroutine全部退出
+	err := app.conn.Close()
+	if err != nil {
+		return util.NewError(_const.TrivialException, _const.Network, err)
+	}
+
+	return nil
 }
 
 // StartWrite 开始写

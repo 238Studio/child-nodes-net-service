@@ -2,6 +2,7 @@ package service
 
 import (
 	"bytes"
+	"errors"
 	"net/http"
 
 	_const "github.com/UniversalRobotDriveTeam/child-nodes-assist/const"
@@ -12,7 +13,17 @@ import (
 // Send 发送请求
 // 传入参数：url、请求头、请求体、method
 // 返回参数：map[sting]interface{}（返回结果，interface{}做接口断言）,错误信息
-func Send(url string, params map[string]string, req interface{}, method string) (map[string]interface{}, error) {
+func Send(url string, params map[string]string, req interface{}, method string) (result map[string]interface{}, err error) {
+	//捕获panic
+	defer func() {
+		if er := recover(); er != nil {
+			//panic错误，定级为fatal
+			//返回值赋值
+			err = util.NewError(_const.FatalException, _const.Network, errors.New(er.(string)))
+			result = nil
+		}
+	}()
+
 	//json格式化
 	json := jsoniter.ConfigCompatibleWithStandardLibrary
 	marshalReq, err := json.Marshal(req)
@@ -42,7 +53,7 @@ func Send(url string, params map[string]string, req interface{}, method string) 
 	defer response.Body.Close()
 
 	//读取返回值
-	var result map[string]interface{}
+	result = make(map[string]interface{})
 	err = json.NewDecoder(response.Body).Decode(&result)
 	if err != nil {
 		return nil, util.NewError(_const.CommonException, _const.Network, err)

@@ -1,6 +1,11 @@
 package service
 
-import "github.com/gorilla/websocket"
+import (
+	"context"
+	"sync"
+
+	"github.com/gorilla/websocket"
+)
 
 // WebsocketServiceApp websocket服务模型
 type WebsocketServiceApp struct {
@@ -14,6 +19,7 @@ type WebsocketServiceApp struct {
 	ErrorThrower chan error // 错误抛出器。读写goroutine发生panic时，将错误利用该管道抛出给上层错误管理器。
 
 	stop chan struct{} //停止通道。利用方法进行封装。不暴露给外部。
+	ctx  *ctx          //上下文。利用方法进行封装。不暴露给外部。
 }
 
 // ModelMessageChan 模型消息通道结构体
@@ -29,8 +35,16 @@ type ModelMessageChan struct {
 	ErrorChan chan error // 错误通道
 
 	stop chan struct{} //停止通道。利用方法进行封装。不暴露给外部。
+	ctx  *ctx          //上下文。利用方法进行封装。不暴露给外部。
 
 	conn *websocket.Conn // 网络连接
+}
+
+type ctx struct {
+	ctx  context.Context
+	stop context.CancelFunc
+
+	wg sync.WaitGroup //等待所有goroutine退出
 }
 
 // WebsocketMessage websocket消息结构体
