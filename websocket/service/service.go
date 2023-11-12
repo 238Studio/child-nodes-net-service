@@ -207,7 +207,8 @@ func (app *WebsocketServiceApp) ping() {
 
 		//pong超时状态
 		case <-pongMaxWait.C:
-			//TODO：超时处理
+			//注：所有common以上级别的错误都会启动离线机制。会试图进行断线重连。
+			app.ErrorThrower <- util.NewError(_const.CommonException, _const.Network, errors.New("pong超时"))
 		}
 	}
 }
