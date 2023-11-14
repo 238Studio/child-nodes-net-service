@@ -36,5 +36,8 @@ func Init(wsURL string, pingTimerMargin, pongWait int) (*WebsocketServiceApp, er
 	app.ctx = new(ctx)
 	app.ctx.ctx, app.ctx.stop = context.WithCancel(context.Background()) //goroutine全局退出机制
 
+	//开始ping
+	go app.ping()
+
 	return app, nil
 }
