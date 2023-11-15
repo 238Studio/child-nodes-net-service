@@ -3,7 +3,7 @@ package childWebsocket_test
 import (
 	"testing"
 
-	childWebsocket "github.com/UniversalRobotDriveTeam/child-nodes-net-service/websocket"
+	childWebsocket "github.com/238Studio/child-nodes-database-service/websocket"
 )
 
 func TestWebsocket(t *testing.T) {

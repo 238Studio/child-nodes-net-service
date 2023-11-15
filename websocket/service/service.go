@@ -4,8 +4,8 @@ import (
 	"errors"
 	"time"
 
-	_const "github.com/UniversalRobotDriveTeam/child-nodes-assist/const"
-	"github.com/UniversalRobotDriveTeam/child-nodes-assist/util"
+	_const "github.com/238Studio/child-nodes-assist/const"
+	"github.com/238Studio/child-nodes-assist/util"
 	"github.com/gorilla/websocket"
 	jsoniter "github.com/json-iterator/go"
 )
