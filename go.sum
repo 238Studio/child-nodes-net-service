@@ -1,5 +1,7 @@
 github.com/238Studio/child-nodes-assist v1.0.6 h1:19SZ3ESzXjzyCVNhSfL7SivUa41GQ6y84uSPooCEd3k=
 github.com/238Studio/child-nodes-assist v1.0.6/go.mod h1:moO2jhZ3uqBflOqqhZncfQaRDsMj5Iz/vun+1uRpZ6w=
+github.com/238Studio/child-nodes-assist v1.0.7 h1:fl7CFT0692NS4MBpqGb+mx88+VRLTviginqmFejc6Q8=
+github.com/238Studio/child-nodes-assist v1.0.7/go.mod h1:moO2jhZ3uqBflOqqhZncfQaRDsMj5Iz/vun+1uRpZ6w=
 github.com/UniversalRobotDriveTeam/child-nodes-assist v1.0.5 h1:OOAzUTP+Ljgj+enC/liNapB0gStf/IEF5GfqaD2jPOI=
 github.com/UniversalRobotDriveTeam/child-nodes-assist v1.0.5/go.mod h1:Bt1nL4+xQ5ns+fatFxE0xoiuiE5NeoAMPcraY6TxilY=
 github.com/UniversalRobotDriveTeam/child-nodes-net-service v1.0.1 h1:iWOI3N0YDHxzOqNuNt3i+x9ytvoFosZHf+mhFNMutr4=
