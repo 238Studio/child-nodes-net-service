@@ -42,6 +42,7 @@ func Send(url string, params map[string]string, req interface{}, method string) 
 		request.Header.Set(k, v)
 	}
 
+	//FIXME:设置超时
 	//发送请求
 	client := &http.Client{}
 	response, err := client.Do(request)
