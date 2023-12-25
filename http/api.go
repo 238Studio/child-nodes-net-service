@@ -32,3 +32,10 @@ func Put(url string, header map[string]string, req interface{}) (map[string]inte
 func Delete(url string, header map[string]string, req interface{}) (map[string]interface{}, error) {
 	return service.Send(url, header, req, "DELETE")
 }
+
+// Download 下载文件
+// 传入参数：url、请求头、请求体
+// 返回参数：请求结果([]byte)，错误信息
+func Download(url string, header map[string]string, req interface{}) ([]byte, error) {
+	return service.SendAndReturnByte(url, header, req)
+}
