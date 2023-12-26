@@ -3,7 +3,7 @@
 // 控制上位机的HTTP网络传输过程
 package childHTTP
 
-import "github.com/UniversalRobotDriveTeam/child-nodes-net-service/http/service"
+import "github.com/238Studio/child-nodes-net-service/http/service"
 
 // Get 发送GET请求
 // 传入参数：url、请求头、请求体
@@ -31,4 +31,11 @@ func Put(url string, header map[string]string, req interface{}) (map[string]inte
 // 返回参数：请求结果，错误信息
 func Delete(url string, header map[string]string, req interface{}) (map[string]interface{}, error) {
 	return service.Send(url, header, req, "DELETE")
+}
+
+// Download 下载文件
+// 传入参数：url、请求头、请求体
+// 返回参数：请求结果([]byte)，错误信息
+func Download(url string, header map[string]string, req interface{}) ([]byte, error) {
+	return service.SendAndReturnByte(url, header, req)
 }

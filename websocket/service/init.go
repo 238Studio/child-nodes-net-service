@@ -1,8 +1,10 @@
 package service
 
 import (
-	_const "github.com/UniversalRobotDriveTeam/child-nodes-assist/const"
-	"github.com/UniversalRobotDriveTeam/child-nodes-assist/util"
+	"context"
+
+	_const "github.com/238Studio/child-nodes-assist/const"
+	"github.com/238Studio/child-nodes-assist/util"
 	"github.com/gorilla/websocket"
 )
 
@@ -15,6 +17,8 @@ func Init(wsURL string, pingTimerMargin, pongWait int) (*WebsocketServiceApp, er
 		wsURL:           wsURL,
 		pingTimerMargin: pingTimerMargin,
 		pongWait:        pongWait,
+		ErrorThrower:    make(chan error),    //错误抛出器
+		stop:            make(chan struct{}), //停止通道
 	}
 
 	// 初始化模型消息通道结构体
@@ -27,6 +31,13 @@ func Init(wsURL string, pingTimerMargin, pongWait int) (*WebsocketServiceApp, er
 	}
 
 	app.conn = conn
+
+	// 初始化上下文
+	app.ctx = new(ctx)
+	app.ctx.ctx, app.ctx.stop = context.WithCancel(context.Background()) //goroutine全局退出机制
+
+	//开始ping
+	go app.ping()
 
 	return app, nil
 }
