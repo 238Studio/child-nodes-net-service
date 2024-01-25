@@ -6,8 +6,8 @@ import (
 
 	_const "github.com/238Studio/child-nodes-assist/const"
 	"github.com/238Studio/child-nodes-assist/util"
+	"github.com/238Studio/child-nodes-assist/util/json"
 	"github.com/gorilla/websocket"
-	jsoniter "github.com/json-iterator/go"
 )
 
 // WebsocketServiceApp Websocket 读消息
@@ -65,7 +65,6 @@ func (app *WebsocketServiceApp) handelMessage(message []byte) {
 	}()
 
 	//json格式化
-	json := jsoniter.ConfigCompatibleWithStandardLibrary
 	var websocketMessage WebsocketMessage
 	err := json.Unmarshal(message, &websocketMessage)
 	if err != nil {

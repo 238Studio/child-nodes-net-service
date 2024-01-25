@@ -24,11 +24,11 @@ type WebsocketServiceApp struct {
 
 // ModelMessageChan 模型消息通道结构体
 type ModelMessageChan struct {
-	// 管道，用于模块(子结点)向核心传递数据 核心的模块名为键值 数组0为目标模块名 数组1为bool 是否为原始二进制数据 数组2为数据
+	// 管道，用于模块(子结点)向核心传递数据 核心的模块名为键值 数组0为目标模块名 数组isByte为bool,表示是否为原始二进制数据 字段Data为数据
 	//利用接口进行封装，不暴露给外部
 	writeMessage chan WebsocketMessage
 
-	// 管道，用于核心向模块传递数据 模块名为键值 数组0为bool 是否为原始二进制数据 数组1为数据
+	// 管道，用于核心向模块传递数据 模块名为键值 字段isBytes为bool 是否为原始二进制数据 字段Data为数据
 	//暴露给外部
 	ReadMessage chan WebsocketMessage
 
