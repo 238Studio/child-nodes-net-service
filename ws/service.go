@@ -1,4 +1,4 @@
-package service
+package ws
 
 import (
 	"errors"
@@ -112,7 +112,7 @@ func (app *ModelMessageChan) write() {
 					app.ErrorChan <- util.NewError(_const.CommonException, _const.Network, err)
 				}
 			} else {
-				err := writeJSON(conn, message.Data)
+				err := writeJSON(conn, message)
 				if err != nil {
 					app.ErrorChan <- util.NewError(_const.CommonException, _const.Network, err)
 				}

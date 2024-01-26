@@ -1,4 +1,4 @@
-package service
+package ws
 
 import (
 	"context"
@@ -8,10 +8,10 @@ import (
 	"github.com/gorilla/websocket"
 )
 
-// Init 初始化websocket服务
+// InitWebsocketService 初始化websocket服务
 // 传入参数：websocket连接地址、ping的最大时间间隔、pong最大返回时间间隔
 // 传出参数：websocket应用、错误信息
-func Init(wsURL string, pingTimerMargin, pongWait int) (*WebsocketServiceApp, error) {
+func InitWebsocketService(wsURL string, pingTimerMargin, pongWait int) (*WebsocketServiceApp, error) {
 	// 初始化websocket服务
 	app := &WebsocketServiceApp{
 		wsURL:           wsURL,

@@ -1,4 +1,4 @@
-package service
+package ws
 
 import (
 	_const "github.com/238Studio/child-nodes-assist/const"
