@@ -49,8 +49,11 @@ type ctx struct {
 
 // WebsocketMessage websocket消息结构体
 type WebsocketMessage struct {
-	ModuleName string      `json:"module_name"` //模块名
-	FuncID     int         `json:"func_id"`     //函数ID
-	IsBytes    bool        `json:"is_bytes"`    //是否为原始二进制数据
-	Data       interface{} `json:"data"`        //数据
+	ModuleName string `json:"module_name"` //模块名
+	FuncID     int    `json:"func_id"`     //函数ID
+
+	//约定：二进制类型只能用于文件传输
+	IsBytes bool `json:"is_bytes"` //是否为原始二进制数据
+
+	Data interface{} `json:"data"` //数据
 }

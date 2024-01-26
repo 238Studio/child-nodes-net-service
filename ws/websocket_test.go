@@ -18,6 +18,8 @@ func TestWebsocket(t *testing.T) {
 
 	app.StartWrite()
 	app.WriteMessage("test", false, "测试消息")
+
+	t.Log(<-app.ReadMessage)
 }
 
 func TestPongHandel(t *testing.T) {
