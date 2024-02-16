@@ -4,9 +4,9 @@ import (
 	"errors"
 	"time"
 
-	_const "github.com/238Studio/child-nodes-assist/const"
-	"github.com/238Studio/child-nodes-assist/util"
 	"github.com/238Studio/child-nodes-assist/util/json"
+	"github.com/238Studio/child-nodes-error-manager/errpack"
+
 	"github.com/gorilla/websocket"
 )
 
@@ -25,7 +25,7 @@ func (app *WebsocketServiceApp) read() {
 	defer func() {
 		if err := recover(); err != nil {
 			//panic错误，定级为fatal
-			app.ErrorThrower <- util.NewError(_const.FatalException, _const.Network, errors.New(err.(string)))
+			app.ErrorThrower <- errpack.NewError(errpack.FatalException, errpack.Network, errors.New(err.(string)))
 		}
 	}()
 
@@ -43,7 +43,7 @@ func (app *WebsocketServiceApp) read() {
 		default:
 			_, message, err := conn.ReadMessage()
 			if err != nil {
-				app.ErrorThrower <- util.NewError(_const.CommonException, _const.Network, err)
+				app.ErrorThrower <- errpack.NewError(errpack.CommonException, errpack.Network, err)
 				continue //出错后继续读取
 			}
 			//消息进一步处理
@@ -60,7 +60,7 @@ func (app *WebsocketServiceApp) handelMessage(message []byte) {
 	defer func() {
 		if err := recover(); err != nil {
 			//panic错误，定级为fatal
-			app.ErrorThrower <- util.NewError(_const.FatalException, _const.Network, errors.New(err.(string)))
+			app.ErrorThrower <- errpack.NewError(errpack.FatalException, errpack.Network, errors.New(err.(string)))
 		}
 	}()
 
@@ -68,14 +68,14 @@ func (app *WebsocketServiceApp) handelMessage(message []byte) {
 	var websocketMessage WebsocketMessage
 	err := json.Unmarshal(message, &websocketMessage)
 	if err != nil {
-		app.ErrorThrower <- util.NewError(_const.CommonException, _const.Network, err)
+		app.ErrorThrower <- errpack.NewError(errpack.CommonException, errpack.Network, err)
 		return
 	}
 
 	//获取消息通道，进行消息分发
 	modelMessageChan, ok := app.modelMessageChannels[websocketMessage.ModuleName]
 	if !ok {
-		app.ErrorThrower <- util.NewError(_const.TrivialException, _const.Network, errors.New("对应消息通道不存在"))
+		app.ErrorThrower <- errpack.NewError(errpack.TrivialException, errpack.Network, errors.New("对应消息通道不存在"))
 		return
 	}
 
@@ -98,7 +98,7 @@ func (app *ModelMessageChan) write() {
 	defer func() {
 		if err := recover(); err != nil {
 			//panic错误，定级为fatal
-			app.ErrorChan <- util.NewError(_const.FatalException, _const.Network, errors.New(err.(string)))
+			app.ErrorChan <- errpack.NewError(errpack.FatalException, errpack.Network, errors.New(err.(string)))
 		}
 	}()
 
@@ -109,12 +109,12 @@ func (app *ModelMessageChan) write() {
 			if message.IsBytes {
 				err := writeBinary(conn, message.Data)
 				if err != nil {
-					app.ErrorChan <- util.NewError(_const.CommonException, _const.Network, err)
+					app.ErrorChan <- errpack.NewError(errpack.CommonException, errpack.Network, err)
 				}
 			} else {
 				err := writeJSON(conn, message)
 				if err != nil {
-					app.ErrorChan <- util.NewError(_const.CommonException, _const.Network, err)
+					app.ErrorChan <- errpack.NewError(errpack.CommonException, errpack.Network, err)
 				}
 			}
 
@@ -157,7 +157,7 @@ func (app *WebsocketServiceApp) ping() {
 	defer func() {
 		if err := recover(); err != nil {
 			//panic错误，定级为fatal
-			app.ErrorThrower <- util.NewError(_const.FatalException, _const.Network, errors.New(err.(string)))
+			app.ErrorThrower <- errpack.NewError(errpack.FatalException, errpack.Network, errors.New(err.(string)))
 		}
 	}()
 
@@ -177,7 +177,7 @@ func (app *WebsocketServiceApp) ping() {
 		defer func() {
 			if err := recover(); err != nil {
 				//panic错误，定级为fatal
-				app.ErrorThrower <- util.NewError(_const.FatalException, _const.Network, errors.New(err.(string))) //FIXME：这么做是否合适？有待验证。
+				app.ErrorThrower <- errpack.NewError(errpack.FatalException, errpack.Network, errors.New(err.(string))) //FIXME：这么做是否合适？有待验证。
 			}
 		}()
 		//重置pongMaxWait
@@ -200,14 +200,14 @@ func (app *WebsocketServiceApp) ping() {
 		case <-pingTimer.C:
 			err := conn.WriteMessage(websocket.PingMessage, nil)
 			if err != nil {
-				app.ErrorThrower <- util.NewError(_const.CommonException, _const.Network, err)
+				app.ErrorThrower <- errpack.NewError(errpack.CommonException, errpack.Network, err)
 				continue //出错后继续发送
 			}
 
 		//pong超时状态
 		case <-pongMaxWait.C:
 			//注：所有common以上级别的错误都会启动离线机制。会试图进行断线重连。
-			app.ErrorThrower <- util.NewError(_const.CommonException, _const.Network, errors.New("pong超时"))
+			app.ErrorThrower <- errpack.NewError(errpack.CommonException, errpack.Network, errors.New("pong超时"))
 		}
 	}
 }

@@ -1,8 +1,7 @@
 package ws
 
 import (
-	_const "github.com/238Studio/child-nodes-assist/const"
-	"github.com/238Studio/child-nodes-assist/util"
+	"github.com/238Studio/child-nodes-error-manager/errpack"
 )
 
 // InitModelMessageChan 模块管道初始化
@@ -46,7 +45,7 @@ func (app *WebsocketServiceApp) CloseConn() error {
 	app.stopReadAndWrite() //阻塞等待读写goroutine全部退出
 	err := app.conn.Close()
 	if err != nil {
-		return util.NewError(_const.TrivialException, _const.Network, err)
+		return errpack.NewError(errpack.TrivialException, errpack.Network, err)
 	}
 
 	return nil

@@ -7,7 +7,7 @@ import (
 )
 
 func TestWebsocket(t *testing.T) {
-	wsAPP, err := ws.InitWebsocketService("ws://localhost:8080/ws", 1000, 1000)
+	wsAPP, err := ws.InitWebsocketService("ws://localhost:8080/ws", 100000, 100000)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -17,9 +17,11 @@ func TestWebsocket(t *testing.T) {
 	app := wsAPP.InitModelMessageChan("test")
 
 	app.StartWrite()
-	app.WriteMessage("test", false, "测试消息")
+	for i := 1; i <= 10; i++ {
+		app.WriteMessage("test", false, "测试消息")
 
-	t.Log(<-app.ReadMessage)
+		t.Log(<-app.ReadMessage)
+	}
 }
 
 func TestPongHandel(t *testing.T) {

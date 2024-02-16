@@ -3,8 +3,7 @@ package ws
 import (
 	"context"
 
-	_const "github.com/238Studio/child-nodes-assist/const"
-	"github.com/238Studio/child-nodes-assist/util"
+	"github.com/238Studio/child-nodes-error-manager/errpack"
 	"github.com/gorilla/websocket"
 )
 
@@ -27,7 +26,7 @@ func InitWebsocketService(wsURL string, pingTimerMargin, pongWait int) (*Websock
 	conn, _, err := websocket.DefaultDialer.Dial(wsURL, nil)
 
 	if err != nil {
-		return nil, util.NewError(_const.TrivialException, _const.Network, err)
+		return nil, errpack.NewError(errpack.TrivialException, errpack.Network, err)
 	}
 
 	app.conn = conn
